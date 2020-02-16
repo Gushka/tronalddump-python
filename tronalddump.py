@@ -4,6 +4,11 @@ import json
 
 API_URL = 'https://www.tronalddump.io/'
 
+
+class TronaldDumpException(Exception):
+    pass
+
+
 class TronaldDumpResponse:
     '''Response class '''
 
@@ -17,9 +22,13 @@ class TronaldDumpResponse:
     def data(self):
         '''Parse response JSON and store it'''
         if not hasattr(self, '_data'):
-            self._data = json.loads(self.response.content)
+            try:
+                self._data = json.loads(self.response.content)
+            except ValueError:
+                raise TronaldDumpException('No JSON data could be parsed from the response.')
         return self._data
   
+
 class TronaldDumpAPI:
     '''TronaldDump API class'''
 
@@ -35,4 +44,6 @@ class TronaldDumpAPI:
         '''Send a request to the API'''
         api_url = self.build_url(*args, **kwargs)
         resp = requests.get(api_url)
+        if response.status_code != 200:
+            raise TronaldDumpException(f'The API endpoint returned error code <{response.status_code}>')
         return TronaldDumpResponse(resp)
