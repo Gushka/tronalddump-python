@@ -28,6 +28,11 @@ class TronaldDumpResponse:
                 raise TronaldDumpException('No JSON data could be parsed from the response.')
         return self._data
 
+    @property
+    def url(self):
+        return self.response.url
+    
+
 
 class TronaldDumpAPI:
     '''TronaldDump API class'''
@@ -37,7 +42,7 @@ class TronaldDumpAPI:
         args = [x.replace(' ', '%20') for x in args if x]
         path = '/'.join([str(x) for x in args if x])
         url = urllib.parse.urljoin(API_URL, path)
-        url += '?'.format(urllib.parse.urlencode(kwargs) if kwargs else '')
+        url += '?{}'.format(urllib.parse.urlencode(kwargs) if kwargs else '')
         return url
 
     def _send_request(self, *args, **kwargs):
@@ -66,13 +71,17 @@ class TronaldDumpAPI:
     #    def random_meme(self):
     #       return self._send_request("random/meme")
 
-    def search_quote(self, query=None, tag=None, page=1):
+    def search_quote(self, query=None, tag=None, page=0):
         # for now return only the first page for a query
+        # SEARCH IS CASE-SENSETIVE
+
         if not query and not tag:
             raise TronaldDumpException("Function 'search_quote' takes at least one argument but none was given.")
         elif query and tag:
             raise TronaldDumpException("Function 'search_quote' takes only one of the arguments but two were given.")
-        return self._send_request("search/quote", query=query, tag=tag)
+        elif tag:
+            return self._send_request("search/quote",tag=tag, page=page)
+        return self._send_request("search/quote", query=query, page=page)
 
     def find_quote(self, id: str):
         return self._send_request("quote", id)
@@ -86,7 +95,3 @@ class TronaldDumpAPI:
 
     def find_author(self, id: str):
         return self._send_request("author", id)
-
-# Debug function
-def _printout(obj):
-    print(json.dumps(obj, indent=4, sort_keys=True))
