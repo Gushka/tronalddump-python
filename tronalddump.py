@@ -1,9 +1,10 @@
 import requests
 import urllib
 import json
+import os
 
 API_URL = 'https://www.tronalddump.io/'
-
+WORK_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class TronaldDumpException(Exception):
     pass
@@ -67,12 +68,19 @@ class TronaldDumpAPI:
     def random_quote(self):
         return self._send_request("/random/quote")
 
-    # TODO:
-    #    def random_meme(self):
-    #       return self._send_request("random/meme")
+    def random_meme(self, output_dir=WORK_DIR, filename="randommeme.png", force_write=True):
+        file = os.path.join(output_dir, filename)
+        if not os.path.exists(output_dir):
+            raise FileNotFoundError('The given directory does not exist.')
+        elif os.path.exists(file) and force_write == False:
+            raise FileExistsError('The given path already contains file with such name.')
+        respclass = self._send_request("/random/meme")
+        with open(file, "wb") as image:
+            image.write(respclass.response.content)
+        return respclass
 
     def search_quote(self, query=None, tag=None, page=0):
-        # for now return only the first page for a query
+        # for now returns only the first page for a query
         # SEARCH IS CASE-SENSETIVE
 
         if not query and not tag:
