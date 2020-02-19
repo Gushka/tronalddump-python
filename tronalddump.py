@@ -31,6 +31,7 @@ class TronaldDumpResponse:
 
     @property
     def url(self):
+        '''Return URL adress for the given response'''
         return self.response.url
     
 
@@ -57,18 +58,22 @@ class TronaldDumpAPI:
     # TAG
 
     def find_tag(self, value):
+        '''Find a tag by its value. Given parameters will be capitalized'''
         value = [elem.capitalize() for elem in value.split(' ')]
         return self._send_request("tag", ' '.join(value))
 
     def all_tags(self):
+        '''Retrieve all existing tags'''
         return self._send_request("tag")
 
     # QUOTE
 
     def random_quote(self):
+        '''Retrieve a random quote'''
         return self._send_request("/random/quote")
 
     def random_meme(self, output_dir=WORK_DIR, filename="randommeme.png", force_write=True):
+        '''Retrieve a random meme and store it in the given path and filename.'''
         file = os.path.join(output_dir, filename)
         if not os.path.exists(output_dir):
             raise FileNotFoundError('The given directory does not exist.')
@@ -80,6 +85,7 @@ class TronaldDumpAPI:
         return respclass
 
     def search_quote(self, query=None, tag=None, page=0):
+        '''Search for a quote by the query or tag. Returns one-page answer where page number is determined by page param.'''
         # for now returns only the first page for a query
         # SEARCH IS CASE-SENSETIVE
 
@@ -92,14 +98,17 @@ class TronaldDumpAPI:
         return self._send_request("search/quote", query=query, page=page)
 
     def find_quote(self, id: str):
+        '''Find a quote by its ID'''
         return self._send_request("quote", id)
 
     # QUOTE-SOURCE
 
     def quote_source(self, id: str):
+        '''Retrive source of a quote by its ID'''
         return self._send_request("quote-source", id)
 
     # AUTHOR
 
     def find_author(self, id: str):
+        '''Find an author by their ID'''
         return self._send_request("author", id)
