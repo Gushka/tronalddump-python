@@ -4,28 +4,38 @@
 
 You might want to check out the [documentation](https://docs.tronalddump.io/) for the API before working with it.
 
+## Description
+
+The package consists of two main modules:
+- `api`: tools for accessing the API.
+- `parse`: tools for parsing retieved data.
+
 ## Installation
 
 Ensure you have Python 3 and the package manager `pip` installed.
 
-/// PyPy pip install
+Install using pip:
 ```console
-$ pip3 install tronalddump
+$ pip3 install tronalddumpy
 ```
-/// easy_install
 
-/// build source
+or, you can build the latest version from source:
+```console
+$ git clone https://github.com/Gushka/tronalddump-python.git
+$ cd tronalddump-python/
+$ python3 setup.py install
+```
 
 ## Basic usage
 
-Import the TronaldDumpAPI class and create a client:
+Import the main modules and create a client:
 
 ```python
-import [TRONALDDUMP] as td
+from tronalddump import api, parse
 
-client = td.TronaldDumpAPI()
+client = api.TronaldDumpAPI()
 ```
-Now we can use all the methods for retrieving data.
+Now to access any API method we will use this client.
 
 For example, let us get a random quote:
 
@@ -37,6 +47,7 @@ For example, let us get a random quote:
 >>> resp.data
 {JSON}
 # Get the URL:
+>>> resp.url
 'https://www.tronalddump.io/random/quote'
 ```
 
@@ -47,16 +58,16 @@ Using the TronaldDump module you also can get specific values from the API respo
 Create a Parser using the JSON file-object we obtained earlier:
 
 ```python
->>> parse = Parser(resp)
+>>> parsed = parse.Parser(resp)
 ```
 Now we can extract all kinds of data from the JSON based on what the initial response type was.
 
 ```python
 # Retrieve value of a quote:
->>> parse.value()
+>>> parsed.value()
 "Money was never a big motivation for me, except as a way to keep score."
 # Retrieve the date it was written online:
->>> parse.date_appeared()
+>>> parsed.date_appeared()
 datetime.date(2014, 9, 14)
 ```
 
@@ -65,7 +76,7 @@ There's also a function to print into the console formatted JSON response.
 __Use it only for the debugging purposes.__
 
 ```
->>> parse.printout()
+>>> parsed.printout()
 ```
 
 ## Documentation

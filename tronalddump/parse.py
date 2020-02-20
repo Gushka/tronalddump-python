@@ -1,8 +1,8 @@
 import argparse
 import json
 import datetime
-from api import TronaldDumpAPI
-from api import TronaldDumpResponse
+from .api import TronaldDumpAPI
+from .api import TronaldDumpResponse
 
 
 class Parser(TronaldDumpAPI):
@@ -11,6 +11,7 @@ class Parser(TronaldDumpAPI):
     def __init__(self, resp):
         self.resp = resp
         self.data = resp.data
+        self.url = resp.url
 
     def printout(self):
         '''Print formatted contents of the JSON file-object'''
