@@ -1,6 +1,6 @@
 import argparse
 import json
-from datetime import date
+import datetime
 from tronalddump import TronaldDumpAPI
 from tronalddump import TronaldDumpResponse
 
@@ -42,8 +42,8 @@ class Parser(TronaldDumpAPI):
 
     def date_appeared(self):
         '''Retrieve the date when quote first appeared at as a datetime object'''
-        date = self.data.get('appeared_at')
-        return date.fromisoformat(date[:-10]) 
+        date_value = self.data.get('appeared_at')
+        return datetime.date.fromisoformat(date_value[:10]) 
 
     def tags(self):
         '''Retrieve all tags for the given quote'''

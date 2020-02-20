@@ -40,7 +40,7 @@ class TronaldDumpAPI:
     '''TronaldDump API class'''
 
     def _build_url(self, *args, **kwargs):
-        '''Build the API URL to request. *args builds the URL path, **kwargs builds the GET params.'''
+        '''Build the API URL to request. *args build the URL path, **kwargs build the GET params.'''
         args = [x.replace(' ', '%20') for x in args if x]
         path = '/'.join([str(x) for x in args if x])
         url = urllib.parse.urljoin(API_URL, path)
@@ -72,7 +72,7 @@ class TronaldDumpAPI:
         '''Retrieve a random quote'''
         return self._send_request("/random/quote")
 
-    def random_meme(self, output_dir=WORK_DIR, filename="randommeme.png", force_write=True):
+    def random_meme(self, output_dir, filename="randommeme.png", force_write=True):
         '''Retrieve a random meme and store it in the given path and filename.'''
         file = os.path.join(output_dir, filename)
         if not os.path.exists(output_dir):
@@ -104,7 +104,7 @@ class TronaldDumpAPI:
     # QUOTE-SOURCE
 
     def quote_source(self, id: str):
-        '''Retrive source of a quote by its ID'''
+        '''Retrive the source of a quote by its ID'''
         return self._send_request("quote-source", id)
 
     # AUTHOR
