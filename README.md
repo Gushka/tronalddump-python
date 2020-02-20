@@ -16,7 +16,7 @@ Ensure you have Python 3 and the package manager `pip` installed.
 
 Install using pip:
 ```console
-$ pip3 install tronalddumpy
+$ pip3 install tronald-dumpy
 ```
 
 or, you can build the latest version from source:
